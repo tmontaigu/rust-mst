@@ -1,0 +1,7 @@
+[package]
+name = "mst"
+version = "0.1.0"
+authors = ["Jälv <thomas.montaigu@laposte.net>"]
+
+[dependencies]
+disjoint-set = "0.0.2"
