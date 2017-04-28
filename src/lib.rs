@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::iter::FromIterator;
 
 
-// FIXME: Maybe this .clone() should not be there
+// FIXME: Maybe there too many .clone() that should not be there
 // need to understand better borrowing and ownership :|
 
 
@@ -41,12 +41,12 @@ pub fn kruskal_mst<T, K>(vertices: &Vec<T>, edges: &HashMap<(T, T), K>) -> Vec<(
 where T: Clone + Hash + Eq , K: Eq + Ord
 {
 
-    // Put (edge, weight) of HashMap in vector to set by weight in
+    // Put (edge, weight) of HashMap in vector to sort by weight in
     // ascending order
     let mut order: Vec<(&(T, T), &K)> = Vec::from_iter(edges);
     order.sort_by(|&(_, a), &(_, b)| a.cmp(&b));
 
-    // Extract the edges in put the in a new vector, keeping the order
+    // Extract the edges and put them in a new vector, keeping the order
     let mut edges_ordered : Vec<(T,T)> = Vec::with_capacity(order.len());
     for (edge, _) in order{
         edges_ordered.push(edge.clone());
