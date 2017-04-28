@@ -2,9 +2,15 @@ extern crate disjoint_set;
 
 use std::hash::Hash;
 use disjoint_set::DisjointSet;
+use std::collections::HashMap;
+use std::iter::FromIterator;
 
 
-pub fn kruskal_mst_gen<T>(vertices: &Vec<T>, edges_ordered: &Vec<(T, T)>) -> Vec<(T, T)>
+// FIXME: Maybe this .clone() should not be there
+// need to understand better borrowing and ownership :|
+
+
+pub fn kruskal_mst_ordered<T>(vertices: &Vec<T>, edges_ordered: &Vec<(T, T)>) -> Vec<(T, T)>
 where T: Clone + Hash + Eq
 {
     let mut dset = DisjointSet::<T>::new();
@@ -29,4 +35,22 @@ where T: Clone + Hash + Eq
         }
     }
     tree
+}
+
+pub fn kruskal_mst<T, K>(vertices: &Vec<T>, edges: &HashMap<(T, T), K>) -> Vec<(T, T)>
+where T: Clone + Hash + Eq , K: Eq + Ord
+{
+
+    // Put (edge, weight) of HashMap in vector to set by weight in
+    // ascending order
+    let mut order: Vec<(&(T, T), &K)> = Vec::from_iter(edges);
+    order.sort_by(|&(_, a), &(_, b)| a.cmp(&b));
+
+    // Extract the edges in put the in a new vector, keeping the order
+    let mut edges_ordered : Vec<(T,T)> = Vec::with_capacity(order.len());
+    for (edge, _) in order{
+        edges_ordered.push(edge.clone());
+    }
+
+    kruskal_mst_ordered(&vertices, &edges_ordered)
 }
