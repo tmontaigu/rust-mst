@@ -16,7 +16,7 @@ where T: Clone + Hash + Eq
     let mut dset = DisjointSet::<T>::new();
     let mut tree : Vec<(T, T)> = Vec::new();
 
-    for vertice in vertices.iter() {
+    for vertice in vertices {
         dset.make_set(vertice.clone());
     }
 
