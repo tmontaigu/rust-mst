@@ -3,10 +3,13 @@ extern crate revord;
 
 use std::hash::Hash;
 use disjoint_set::DisjointSet;
-use std::collections::{HashMap,HashSet, BinaryHeap};
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::collections::BinaryHeap;
 use revord::RevOrd;
 
-
+// FIXME: Maybe there too many .clone() that should not be there
+// need to understand better borrowing and ownership :|
 
 
 pub fn kruskal_mst_ordered<T>(vertices: &Vec<T>, edges_ordered: &Vec<(T, T)>) -> Vec<(T, T)>
@@ -26,7 +29,7 @@ where T: Clone + Hash + Eq
             tree.push(edge.clone());
             let res = dset.union(v1, v2);
 
-            // We don't care about what's returned
+            // We don't care about what's adjacency_hashurned
             match res {
                 Ok(_) => {},
                 Err(_) => {},
@@ -37,8 +40,7 @@ where T: Clone + Hash + Eq
 }
 
 pub fn kruskal_mst<T, K>(vertices: &Vec<T>, edges: &HashMap<(T, T), K>) -> Vec<(T, T)>
-where T: Clone + Hash + Eq ,
-      K: Eq + Ord
+where T: Clone + Hash + Eq , K: Eq + Ord
 {
 
     // Put (edge, weight) of HashMap in vector to sort by weight in
@@ -118,19 +120,16 @@ pub fn prim_matrix(adjacency_matrix: Vec<Vec<i32>>) -> Vec<(i32, i32)> {
     while t_vertices.len() != num_vertices {
         let min_vertice = get_min_vertice(&values, &t_vertices);
         t_vertices.insert(min_vertice);
-        // println!("t_vertices: {:?}", t_vertices);
-        // println!("values: {:?}", values);
-
+        println!("t_vertices: {:?}", t_vertices);
         for (i, weight) in adjacency_matrix[min_vertice].iter().enumerate(){
-            // println!("edge: ({}, {}) -> {}, i: {}", min_vertice, i, weight, *weight <= 0);
-
-            if t_vertices.contains(&i) || *weight <= 0{
+            if t_vertices.contains(&i) || *weight < 0{
                 continue;
             }
+            println!("edge: ({}, {}) -> {}, i: {}", min_vertice, i, weight, *weight <= 0);
             if *weight < values[i] {
-                // println!("adding : ({}, {})", min_vertice as i32, i as i32);
                 values[i] = *weight;
                 tree_edges.push((min_vertice as i32, i as i32));
+                t_vertices.insert(i);
             }
         }
 
