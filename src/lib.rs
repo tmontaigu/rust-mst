@@ -3,9 +3,7 @@ extern crate revord;
 
 use std::hash::Hash;
 use disjoint_set::DisjointSet;
-use std::collections::HashMap;
-use std::collections::HashSet;
-use std::collections::BinaryHeap;
+use std::collections::{HashMap, HashSet, BinaryHeap};
 use revord::RevOrd;
 
 // FIXME: Maybe there too many .clone() that should not be there
@@ -120,16 +118,13 @@ pub fn prim_matrix(adjacency_matrix: Vec<Vec<i32>>) -> Vec<(i32, i32)> {
     while t_vertices.len() != num_vertices {
         let min_vertice = get_min_vertice(&values, &t_vertices);
         t_vertices.insert(min_vertice);
-        println!("t_vertices: {:?}", t_vertices);
         for (i, weight) in adjacency_matrix[min_vertice].iter().enumerate(){
-            if t_vertices.contains(&i) || *weight < 0{
+            if t_vertices.contains(&i) || *weight <= 0{
                 continue;
             }
-            println!("edge: ({}, {}) -> {}, i: {}", min_vertice, i, weight, *weight <= 0);
             if *weight < values[i] {
                 values[i] = *weight;
                 tree_edges.push((min_vertice as i32, i as i32));
-                t_vertices.insert(i);
             }
         }
 
