@@ -115,7 +115,7 @@ pub fn prim_matrix(adjacency_matrix: Vec<Vec<i32>>) -> Vec<(i32, i32)> {
 
     values[0] = 0;
 
-    for vertice in 0..num_vertices {
+    while t_vertices.len() != num_vertices {
         let min_vertice = get_min_vertice(&values, &t_vertices);
         t_vertices.insert(min_vertice);
         // println!("t_vertices: {:?}", t_vertices);
