@@ -5,3 +5,4 @@ authors = ["Jälv <thomas.montaigu@laposte.net>"]
 
 [dependencies]
 disjoint-set = "0.0.2"
+revord = "0.0.2"
